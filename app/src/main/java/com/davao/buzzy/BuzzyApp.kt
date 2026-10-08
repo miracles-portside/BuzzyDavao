@@ -3,11 +3,7 @@ package com.davao.buzzy
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -37,7 +33,6 @@ fun BuzzyApp() {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            // ─── Content ─────────────────────────────────────────────
             Box(
                 Modifier
                     .fillMaxSize()
@@ -48,15 +43,28 @@ fun BuzzyApp() {
                         onOpenRoutes = { tap(); activeKey = "routes" },
                         onOpenMap = { tap(); activeKey = "map" },
                         onOpenStops = { tap(); activeKey = "stops" },
-                        onOpenRoute = { _, _ -> tap() }
+                        onOpenRoute = { _, _ ->
+                            tap()
+                            // TODO: Route Detail (Session 4)
+                        }
                     )
-                    "routes" -> RoutesScreen()
-                    "stops"  -> StopsScreen()
-                    "map"    -> MapScreen()
+                    "routes" -> RoutesScreen(
+                        onOpenRoute = { _, _ ->
+                            tap()
+                            // TODO: Route Detail (Session 4)
+                        }
+                    )
+                    "stops" -> StopsScreen(
+                        onOpenStop = { _ ->
+                            tap()
+                            // TODO: Stop Detail (Session 5)
+                        }
+                    )
+                    "map" -> MapScreen()
                 }
             }
 
-            // ─── Bottom haze (iOS-style fade above the pill) ─────────
+            // Bottom haze
             Box(
                 Modifier
                     .align(Alignment.BottomCenter)
@@ -74,7 +82,6 @@ fun BuzzyApp() {
                     )
             )
 
-            // ─── Floating pill ────────────────────────────────────────
             FloatingNavPill(
                 items = NAV_ITEMS,
                 activeKey = activeKey,
