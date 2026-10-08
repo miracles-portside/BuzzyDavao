@@ -4,11 +4,18 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,12 +24,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.davao.buzzy.data.RouteItem
-import com.davao.buzzy.ui.theme.*
+import com.davao.buzzy.ui.theme.Coral
+import com.davao.buzzy.ui.theme.Dimens
+import com.davao.buzzy.ui.theme.Ink
+import com.davao.buzzy.ui.theme.Mint
+import com.davao.buzzy.ui.theme.Motion
+import com.davao.buzzy.ui.theme.SurfaceCard
 import com.davao.buzzy.ui.theme.rememberTapHaptics
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,8 +44,8 @@ fun RouteCard(
     modifier: Modifier = Modifier
 ) {
     val isPM = route.id.endsWith("PM")
+    val baseCode = route.id.removeSuffix("AM").removeSuffix("PM")
     val tint = if (isPM) Coral else Mint
-    val soft = if (isPM) CoralSoft else MintSoft
 
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
@@ -64,7 +75,6 @@ fun RouteCard(
                 .padding(Dimens.SpaceMd),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Color bar
             Box(
                 Modifier
                     .width(6.dp)
@@ -77,7 +87,7 @@ fun RouteCard(
 
             Column(Modifier.weight(1f)) {
                 Text(
-                    text = "${route.id} · ${if (isPM) "PM" else "AM"}",
+                    text = "$baseCode \u00B7 ${if (isPM) "PM" else "AM"}",
                     color = tint,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,

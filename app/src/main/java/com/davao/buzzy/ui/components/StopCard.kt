@@ -55,10 +55,17 @@ fun StopCard(
     )
     val tap = rememberTapHaptics()
 
-    // Distinct base route ids (strip AM/PM)
+    // Distinct base route ids (strip AM/PM, dedupe by [R###] code, keep cleanest name)
     val routeIds = stop.routes
         .map { it.routeName.removeSuffix("AM").removeSuffix("PM") }
-        .distinct()
+        .groupBy { name ->
+            val end = name.indexOf(']')
+            if (end >= 0) name.substring(0, end + 1) else name
+        }
+        .values
+        .map { group ->
+            group.maxByOrNull { it.count { c -> c == '.' } } ?: group.first()
+        }
         .take(4)
 
     Card(
